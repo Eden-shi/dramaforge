@@ -1,0 +1,17 @@
+node_modules/
+dist/
+data/
+*.local
+.env
+.env.*
+.DS_Store
+*.log
+
+# Tooling / local settings
+.claude/
+.codex/
+*.tsbuildinfo
+
+# OS
+Thumbs.db
+ehthumbs.db

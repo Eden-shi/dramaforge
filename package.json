@@ -1,0 +1,24 @@
+{
+  "name": "dramaforge",
+  "private": true,
+  "version": "0.1.0",
+  "description": "端到端短剧生成平台：主题→剧本→分镜→图/视频/配音→成片合成",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,magenta \"npm run dev -w @dramaforge/server\" \"npm run dev -w @dramaforge/web\"",
+    "build": "npm run build -w @dramaforge/shared && npm run build -w @dramaforge/server && npm run build -w @dramaforge/web",
+    "start": "npm run start -w @dramaforge/server",
+    "typecheck": "npm run typecheck -ws --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
