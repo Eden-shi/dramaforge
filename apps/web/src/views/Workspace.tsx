@@ -310,7 +310,7 @@ function CharactersPanel({ project, reload, setErr }: { project: Project; reload
           <input placeholder="角色名" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
           <input placeholder="定位（主角/反派...）" value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value })} />
           <input placeholder="外貌设定" value={draft.appearance} onChange={(e) => setDraft({ ...draft, appearance: e.target.value })} />
-          <button className="primary" onClick={add}>添加</button>
+          <div className="actions"><button className="primary" onClick={add}>添加</button></div>
         </div>
       )}
       <div className="char-list">
