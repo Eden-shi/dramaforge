@@ -2,6 +2,8 @@ import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import type { Project } from '@dramaforge/shared';
 import { newId, type Repo } from '../store/repo.js';
+import { parseCharacters } from '../prompt/templates.js';
+import { splitEpisodesByText } from '../prompt/templates.js';
 import { Pipeline } from '../pipeline/pipeline.js';
 import { streamSse } from './sse.js';
 
@@ -12,6 +14,7 @@ const createProject = z.object({
   audience: z.string().optional(),
   tone: z.string().optional(),
   episodeCount: z.number().int().min(1).max(30).default(3),
+  scriptBody: z.string().optional(),
 });
 
 export function projectRoutes(
@@ -39,6 +42,29 @@ export function projectRoutes(
       updatedAt: now,
     };
     repo.upsertProject(project);
+
+    // 手动剧本：直接解析并保存
+    if (body.scriptBody?.trim()) {
+      const characters = parseCharacters(body.scriptBody);
+      project.characters = characters.length ? characters : project.characters;
+      project.status = 'scripted';
+      repo.upsertProject(project);
+
+      const episodes = splitEpisodesByText(body.scriptBody);
+      episodes.forEach(({ title, body: script }, i) => {
+        repo.upsertEpisode({
+          id: newId('ep_'),
+          projectId: project.id,
+          index: i + 1,
+          title: title || `第${i + 1}集`,
+          synopsis: '',
+          script,
+          createdAt: now,
+          updatedAt: now,
+        });
+      });
+    }
+
     await repo.flush();
     reply.code(201);
     return project;
@@ -75,6 +101,26 @@ export function projectRoutes(
     });
   });
 
+  // 手动更新剧本
+  app.put('/api/projects/:id/episodes/:episodeId/script', async (req, reply) => {
+    const { id, episodeId } = req.params as any;
+    const ep = repo.getEpisode(episodeId);
+    if (!ep || ep.projectId !== id) return reply.code(404).send({ error: '剧集不存在' });
+    const { script } = req.body as { script: string };
+    if (script == null) return reply.code(400).send({ error: 'script 是必须项' });
+    ep.script = script;
+    ep.updatedAt = Date.now();
+    repo.upsertEpisode(ep);
+    repo.replaceShots(episodeId, []);
+    const project = repo.getProject(id);
+    if (project && project.status !== 'draft' && project.status !== 'scripted') {
+      project.status = 'scripted';
+      repo.upsertProject(project);
+    }
+    await repo.flush();
+    return { ok: true };
+  });
+
   // 异步生成分镜
   app.post('/api/projects/:id/generate-storyboard', async (req, reply) => {
     const id = (req.params as any).id;
@@ -95,3 +141,4 @@ export function projectRoutes(
     return job;
   });
 }
+

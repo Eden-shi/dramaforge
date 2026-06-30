@@ -27,12 +27,22 @@ export interface Job {
 
 export type ProviderType = 'llm' | 'image' | 'video' | 'tts';
 
+/** 自定义供应商使用的协议模板，决定 create() 如何实例化适配器。 */
+export type ProviderProtocol =
+  | 'openai_compat'      // OpenAI 兼容（覆盖大多数 LLM、部分 TTS、OpenAI 图像）
+  | 'dashscope_async'    // 通义万相风格：提交任务 → 轮询 task_id
+  | 'kling_async'        // 可灵风格：POST 提交 → GET 轮询
+  | 'jimeng_async'       // 即梦风格（与火山引擎一致）
+  | 'minimax_async'      // MiniMax 海螺风格（视频/TTS）
+
 /** Provider 元信息（不含密钥，可下发前端） */
 export interface ProviderInfo {
   id: string;
   type: ProviderType;
   name: string;
   vendor: string;
+  custom?: boolean;
+  protocol?: ProviderProtocol;
   baseUrl?: string;
   model?: string;
   configured: boolean;
@@ -69,4 +79,15 @@ export interface GenerateScriptInput {
 }
 export interface GenerateStoryboardInput {
   episodeId: string;
+}
+
+/** 用户在前端添加自定义供应商时的入参。 */
+export interface CustomProviderInput {
+  name: string;
+  type: ProviderType;
+  protocol: ProviderProtocol;
+  baseUrl: string;
+  model?: string;
+  apiKey?: string;
+  capabilities?: string[];
 }

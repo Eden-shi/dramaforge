@@ -16,6 +16,7 @@ import {
   storyboardSystemPrompt,
   storyboardUserPrompt,
 } from "../prompt/templates.js";
+import { splitEpisodesByText } from "../prompt/templates.js";
 
 export class Pipeline {
   constructor(
@@ -56,14 +57,14 @@ export class Pipeline {
     project.characters = characters.length ? characters : project.characters;
     project.status = 'scripted';
     this.repo.upsertProject(project);
-    splitEpisodes(full, project.episodeCount || 1).forEach((body, i) =>
+    splitEpisodesByText(full).forEach((ep, i) =>
       this.repo.upsertEpisode({
         id: newId('ep_'),
         projectId: project.id,
         index: i + 1,
-        title: `第${i + 1}集`,
+        title: ep.title || `第${i + 1}集`,
         synopsis: '',
-        script: body,
+        script: ep.body,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       } as Episode),
@@ -343,17 +344,6 @@ export class Pipeline {
       void tick();
     });
   }
-}
-
-function splitEpisodes(script: string, count: number): string[] {
-  const re = /(^|\n)#\s*第\s*\d+\s*集[^\n]*/g;
-  const idx: number[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(script))) idx.push(m.index);
-  if (idx.length < count) return [script];
-  const parts: string[] = [];
-  for (let i = 0; i < idx.length; i++) parts.push(script.slice(idx[i], idx[i + 1] ?? script.length).trim());
-  return parts.slice(0, count);
 }
 
 function buildVtt(timeline: { shot: Shot; start: number; dur: number }[]): string {

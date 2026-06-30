@@ -1,4 +1,5 @@
 import type { CostSummary,
+  Character,
   Asset,
   Episode,
   Job,
@@ -51,6 +52,8 @@ export const api = {
   listProviders: () => jget<ProviderInfo[]>('/api/providers'),
   setProvider: (id: string, b: { apiKey?: string; model?: string; baseUrl?: string }) =>
     jput<ProviderInfo>(`/api/providers/${id}`, b),
+  testProvider: (id: string) =>
+    jpost<{ ok: boolean; reply?: string; error?: string }>(`/api/providers/${id}/test`),
   listJobs: (projectId?: string) =>
     jget<Job[]>(`/api/jobs${projectId ? `?projectId=${projectId}` : ''}`),
   /** SSE 流式生成剧本 */
@@ -101,10 +104,42 @@ export const api = {
     jget<CostSummary>(`/api/projects/${projectId}/costs`),
   getEpisodeCosts: (projectId: string, episodeId: string) =>
     jget<CostSummary>(`/api/projects/${projectId}/episodes/${episodeId}/costs`),
+  updateScript: (projectId: string, episodeId: string, script: string) =>
+    jput(`/api/projects/${projectId}/episodes/${episodeId}/script`, { script }),
   mergeAll: (projectId: string) =>
     jpost<{ segments: number; durationSec?: number; url: string }>(`/api/projects/${projectId}/merge`),
   mergedUrl: (projectId: string) =>
     `/api/projects/${projectId}/media/merged`,
+
+  // ---------- 编辑类 ----------
+  reparse: (projectId: string) =>
+    jpost<{ ok: boolean; characters: number; episodes: number }>(`/api/projects/${projectId}/reparse`),
+  setProjectConfig: (projectId: string, config: Partial<Project['config']>) =>
+    jput<{ ok: boolean; config: Project['config'] }>(`/api/projects/${projectId}/config`, config),
+
+  // 角色 CRUD
+  addCharacter: (projectId: string, c: Partial<Character>) =>
+    jpost<Character>(`/api/projects/${projectId}/characters`, c),
+  updateCharacter: (projectId: string, charId: string, patch: Partial<Character>) =>
+    jput<{ ok: boolean }>(`/api/projects/${projectId}/characters/${charId}`, patch),
+  deleteCharacter: (projectId: string, charId: string) =>
+    jpost<void>(`/api/projects/${projectId}/characters/${charId}`.replace('POST', 'DELETE')),
+
+  // 分集 CRUD
+  addEpisode: (projectId: string, e: { title?: string; script?: string }) =>
+    jpost<Episode>(`/api/projects/${projectId}/episodes`, e),
+  deleteEpisode: (projectId: string, epId: string) =>
+    jpost<void>(`/api/projects/${projectId}/episodes/${epId}`.replace('POST', 'DELETE')),
+  reorderEpisodes: (projectId: string, order: string[]) =>
+    jpost<{ ok: boolean }>(`/api/projects/${projectId}/episodes/reorder`, { order }),
+
+  // 分镜 CRUD
+  updateShot: (projectId: string, shotId: string, patch: Partial<Shot>) =>
+    jput<{ ok: boolean }>(`/api/projects/${projectId}/shots/${shotId}`, patch),
+  deleteShot: (projectId: string, shotId: string) =>
+    jpost<void>(`/api/projects/${projectId}/shots/${shotId}`.replace('POST', 'DELETE')),
+  addShot: (projectId: string, epId: string, s: Partial<Shot>) =>
+    jpost<Shot>(`/api/projects/${projectId}/episodes/${epId}/shots`, s),
 };
 
 export const deleteProject = (id: string) =>

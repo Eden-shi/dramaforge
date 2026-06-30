@@ -16,7 +16,7 @@ import type {
   LLMOptions,
 } from './base.js';
 
-class CompatLLM implements LLMProvider {
+export class CompatLLM implements LLMProvider {
   type = 'llm' as const;
   constructor(private cfg: { apiKey: string; baseUrl: string; model: string }) {}
   chat(m: ChatMessage[], o?: LLMOptions) {
@@ -30,7 +30,7 @@ class CompatLLM implements LLMProvider {
 // ---------- 文生图 ----------
 // 通义万相 / 智谱 CogView / 即梦 等大多为「提交任务 → 轮询/回调取图」。
 // 这里给出统一异步轮询骨架；各厂商差异收敛在 create() 内的 endpoint/model。
-class AsyncImageProvider implements ImageProvider {
+export class AsyncImageProvider implements ImageProvider {
   type = 'image' as const;
   constructor(
     private cfg: { apiKey: string; baseUrl: string; model: string },
@@ -77,7 +77,7 @@ class AsyncImageProvider implements ImageProvider {
 // ---------- 图生/文生视频 ----------
 // 可灵(Kling, 快手) / 即梦(Dreamina, 字节) / 智谱 CogVideoX / MiniMax 海螺 / Vidu
 // 均为异步任务：submit → fetch(taskId)。
-class AsyncVideoProvider implements VideoProvider {
+export class AsyncVideoProvider implements VideoProvider {
   type = 'video' as const;
   constructor(
     private cfg: { apiKey: string; baseUrl: string; model: string },
@@ -119,7 +119,7 @@ class AsyncVideoProvider implements VideoProvider {
 
 // ---------- TTS ----------
 // MiniMax 语音 / 智谱 / Azure / 火山引擎（CosyVoice 走 DashScope）
-class HttpTTS implements TTSProvider {
+export class HttpTTS implements TTSProvider {
   type = 'tts' as const;
   constructor(private cfg: { apiKey: string; baseUrl: string; model: string; voice: string }) {}
   async synthesize(text: string, opts?: TtsOptions): Promise<TtsResult> {
@@ -142,7 +142,7 @@ class HttpTTS implements TTSProvider {
   }
 }
 
-function fromCfg(c: ProviderConfig) {
+export function fromCfg(c: ProviderConfig) {
   return {
     apiKey: c.apiKey ?? '',
     baseUrl: c.baseUrl ?? '',

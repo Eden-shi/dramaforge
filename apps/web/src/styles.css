@@ -73,6 +73,15 @@ h3 { font-size: 16px; margin: 6px 0; }
 .step { margin-bottom: 18px; }
 .step-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; flex-wrap: wrap; }
 .script { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; white-space: pre-wrap; word-break: break-word; font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; line-height: 1.7; max-height: 460px; overflow: auto; }
+.script-editor {
+  width: 100%; min-height: 300px; max-height: 70vh;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px;
+  color: var(--text); font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px;
+  line-height: 1.7; outline: none; resize: vertical; overflow: auto;
+}
+.script-editor:focus { border-color: var(--accent); }
+.script-actions { margin-top: 10px; display: flex; gap: 8px; }
+.script-block { display: flex; flex-direction: column; }
 .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
 .shot { display: flex; gap: 12px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
 .shot-no { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-2); color: #fff; display: grid; place-items: center; font-size: 12px; flex-shrink: 0; }
@@ -92,7 +101,7 @@ h3 { font-size: 16px; margin: 6px 0; }
 .dot.on { color: var(--ok); border-color: var(--ok); }
 .dot.off { color: var(--muted); }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--ok); color: #06101f; padding: 10px 18px; border-radius: 8px; font-weight: 600; }
-@media (max-width: 640px) { .form { grid-template-columns: 1fr; } .topbar { padding: 0 14px; } }
+@media (max-width: 720px) { .form { grid-template-columns: 1fr; } .topbar { padding: 0 14px; } }
 .step-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .final { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .player { width: 100%; max-width: 420px; border-radius: 10px; border: 1px solid var(--border); background: #000; aspect-ratio: 9 / 16; }
@@ -100,6 +109,121 @@ h3 { font-size: 16px; margin: 6px 0; }
 .shot video.thumb { object-fit: cover; }
 .final a.primary { text-decoration: none; }
 
+/* ---------- 工作区布局重构 ---------- */
+.ws-layout { display: flex; gap: 18px; align-items: flex-start; }
+.ws-side { width: 140px; flex-shrink: 0; position: sticky; top: 72px; }
+.ws-nav { display: flex; flex-direction: column; gap: 4px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px; }
+.ws-nav button { background: none; border: none; color: var(--muted); text-align: left; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.ws-nav button:hover { color: var(--text); background: var(--panel-2); }
+.ws-nav button.active { color: var(--text); background: var(--panel-2); font-weight: 600; border-left: 2px solid var(--accent); }
+.ws-main { flex: 1; min-width: 0; }
+.ws-main .step:last-child { margin-bottom: 0; }
+
+/* 概览仪表盘 */
+.overview { display: flex; flex-direction: column; gap: 18px; }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.dash-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color .15s; }
+.dash-card:hover { border-color: var(--accent); }
+.dash-card strong.dot { background: none; border: none; padding: 0; font-size: 18px; }
+.dash-card strong.dot.on { color: var(--ok); }
+.dash-card strong.dot.off { color: var(--muted); }
+
+/* 角色管理 */
+.char-form { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.char-form input { flex: 1; min-width: 120px; }
+.char-list { display: flex; flex-direction: column; gap: 10px; }
+.char-card { display: flex; gap: 12px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.char-no { font-size: 12px; color: var(--accent); white-space: nowrap; padding-top: 4px; }
+.char-body { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.char-name { font-weight: 600; }
+.char-role { font-size: 12px; color: var(--muted); }
+.char-app { font-size: 12px; line-height: 1.5; resize: vertical; }
+
+/* 分镜编辑 */
+.shot.editable { align-items: flex-start; }
+.shot-edit { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.shot-row { display: flex; gap: 8px; }
+.shot-row input { flex: 1; }
+.shot-edit textarea { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 7px 9px; font-size: 13px; outline: none; resize: vertical; }
+.shot-edit textarea:focus { border-color: var(--accent); }
+.char-pick { display: flex; gap: 8px; flex-wrap: wrap; }
+.char-pick label { font-size: 12px; padding: 3px 9px; border: 1px solid var(--border); border-radius: 20px; cursor: pointer; color: var(--muted); }
+.char-pick label.on { color: var(--accent); border-color: var(--accent); }
+.char-pick input { margin-right: 4px; }
+
+/* 配置面板 */
+.config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.config-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+.config-grid select, .config-grid input { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 11px; font-size: 14px; outline: none; }
+
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+}
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.form-grid .full,
+.form-grid .actions {
+  grid-column: 1 / -1;
+}
+.form-grid input,
+.form-grid textarea,
+.form-grid select {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+}
+.form-grid input:focus,
+.form-grid textarea:focus,
+.form-grid select:focus {
+  border-color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+/* 分步创建 */
+.stepper { display: flex; flex-direction: column; gap: 14px; } /* keep .form grid, let stepper-head float via grid-column */
+.stepper-head { display: flex; gap: 0; grid-column: 1 / -1; margin-bottom: 10px; }
+.stepper-dot { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); flex: 1; }
+.stepper-dot::after { content: ''; flex: 1; height: 1px; background: var(--border); margin: 0 10px; }
+.stepper-dot:last-child::after { display: none; }
+.stepper-dot span { width: 24px; height: 24px; border-radius: 50%; background: var(--panel-2); border: 1px solid var(--border); display: grid; place-items: center; font-size: 12px; }
+.stepper-dot.on { color: var(--text); }
+.stepper-dot.on span { background: var(--accent); color: #06101f; border-color: var(--accent); }
+.mode-pick { display: flex; flex-direction: column; gap: 10px; }
+.mode-card { display: flex; flex-direction: column; gap: 4px; text-align: left; padding: 14px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }
+.mode-card.on { border-color: var(--accent); }
+.confirm-box { display: flex; flex-direction: column; gap: 8px; }
+.confirm-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.confirm-row:last-child { border-bottom: none; }
+.confirm-row .muted { flex-shrink: 0; }
+
+/* 响应式 */
+@media (max-width: 720px) {
+  .ws-layout { flex-direction: column; }
+  .ws-side { width: 100%; position: static; }
+  .ws-nav { flex-direction: row; overflow-x: auto; }
+  .ws-nav button { white-space: nowrap; border-left: none !important; border-bottom: 2px solid transparent; }
+  .ws-nav button.active { border-bottom-color: var(--accent); }
+  .config-grid { grid-template-columns: 1fr; }
+  .stepper-head { flex-direction: column; gap: 8px; }
+  .stepper-dot::after { display: none; }
+}
 .total-cost { color: var(--warn); font-weight: 700; font-size: 16px; }
 .cost-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .cost-table th, .cost-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }

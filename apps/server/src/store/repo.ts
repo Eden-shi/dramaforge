@@ -79,6 +79,18 @@ export class Repo {
     this.markDirty();
     return e;
   }
+  /** 用新数组整体替换某项目的全部分集（旧分集会被删除） */
+  replaceEpisodes(projectId: string, episodes: Episode[]) {
+    this.data.episodes = this.data.episodes.filter((e) => e.projectId !== projectId);
+    this.data.episodes.push(...episodes);
+    this.markDirty();
+  }
+  deleteEpisode(id: string) {
+    this.data.episodes = this.data.episodes.filter((e) => e.id !== id);
+    // 级联删除该集的分镜
+    this.data.shots = this.data.shots.filter((s) => s.episodeId !== id);
+    this.markDirty();
+  }
 
   // ---- shots ----
   shotsByEpisode(episodeId: string): Shot[] {
@@ -94,6 +106,17 @@ export class Repo {
   replaceShots(episodeId: string, shots: Shot[]) {
     this.data.shots = this.data.shots.filter((s) => s.episodeId !== episodeId);
     this.data.shots.push(...shots);
+    this.markDirty();
+  }
+  upsertShot(s: Shot) {
+    const i = this.data.shots.findIndex((x) => x.id === s.id);
+    if (i >= 0) this.data.shots[i] = s;
+    else this.data.shots.push(s);
+    this.markDirty();
+    return s;
+  }
+  deleteShot(id: string) {
+    this.data.shots = this.data.shots.filter((s) => s.id !== id);
     this.markDirty();
   }
 

@@ -10,10 +10,12 @@ import { ProviderRegistry } from './providers/registry.js';
 import { JobQueue } from './jobs/queue.js';
 import { Pipeline } from './pipeline/pipeline.js';
 import { projectRoutes } from './routes/projects.js';
+import { editingRoutes } from './routes/editing.js';
 import { configRoutes } from './routes/config.js';
 import { mediaRoutes } from './routes/media.js';
 import { costRoutes } from './routes/costs.js';
 import { mergeRoutes } from './routes/merge.js';
+import { customProviderRoutes } from './routes/custom_providers.js';
 
 export async function buildServer() {
   const here = dirname(fileURLToPath(import.meta.url));
@@ -40,10 +42,12 @@ export async function buildServer() {
 
   app.get('/api/health', async () => ({ ok: true, ts: Date.now() }));
   projectRoutes(app, repo, pipeline);
+  editingRoutes(app, repo);
   configRoutes(app, repo, registry);
   mediaRoutes(app, repo, assets, dataDir);
   costRoutes(app, repo);
   mergeRoutes(app, repo, dataDir);
+  customProviderRoutes(app, registry, repo);
 
   // 资源：远端 url 直接返回；本地 data: 由前端处理
   if (existsSync(webDist)) {
