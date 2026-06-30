@@ -120,6 +120,11 @@ h3 { font-size: 16px; margin: 6px 0; }
   .custom-form .form-grid { grid-template-columns: 1fr; }
   .settings .grid { grid-template-columns: 1fr; }
   .settings .grid .card.provider { padding: 14px; }
+  .ws-layout { flex-direction: column; }
+  .ws-side { width: 100%; position: static; }
+  .ws-nav { flex-direction: row; overflow-x: auto; }
+  .ws-nav button { white-space: nowrap; text-align: center; justify-content: center; }
+  .ws-nav button.active { border-bottom: 2px solid var(--accent); background: transparent; }
   .form-grid { grid-template-columns: 1fr; }
 }
 

@@ -105,13 +105,13 @@ export function WorkspaceView(props: { projectId: string; onBack: () => void }) 
       <div className="ws-layout">
         <aside className="ws-side">
           <nav className="ws-nav">
-            <button className={panel === 'overview' ? 'active' : ''} onClick={() => setPanel('overview')}>概览</button>
-            <button className={panel === 'script' ? 'active' : ''} onClick={() => setPanel('script')}>剧本</button>
-            <button className={panel === 'characters' ? 'active' : ''} onClick={() => setPanel('characters')}>角色</button>
-            <button className={panel === 'storyboard' ? 'active' : ''} onClick={() => setPanel('storyboard')}>分镜</button>
-            <button className={panel === 'assets' ? 'active' : ''} onClick={() => setPanel('assets')}>素材</button>
-            <button className={panel === 'final' ? 'active' : ''} onClick={() => setPanel('final')}>成片</button>
-            <button className={panel === 'config' ? 'active' : ''} onClick={() => setPanel('config')}>配置</button>
+            <button className={panel === 'overview' ? 'active' : ''} onClick={() => setPanel('overview')}><span className="nav-icon">📊</span>概览</button>
+            <button className={panel === 'script' ? 'active' : ''} onClick={() => setPanel('script')}><span className="nav-icon">📖</span>剧本</button>
+            <button className={panel === 'characters' ? 'active' : ''} onClick={() => setPanel('characters')}><span className="nav-icon">👥</span>角色</button>
+            <button className={panel === 'storyboard' ? 'active' : ''} onClick={() => setPanel('storyboard')}><span className="nav-icon">🎬</span>分镜</button>
+            <button className={panel === 'assets' ? 'active' : ''} onClick={() => setPanel('assets')}><span className="nav-icon">🖼️</span>素材</button>
+            <button className={panel === 'final' ? 'active' : ''} onClick={() => setPanel('final')}><span className="nav-icon">🎥</span>成片</button>
+            <button className={panel === 'config' ? 'active' : ''} onClick={() => setPanel('config')}><span className="nav-icon">⚙️</span>配置</button>
           </nav>
         </aside>
 
