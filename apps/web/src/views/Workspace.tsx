@@ -320,7 +320,7 @@ function CharactersPanel({ project, reload, setErr }: { project: Project; reload
             <div className="char-body">
               <input className="char-name" defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && upd(c, { name: e.target.value })} />
               <input className="char-role" placeholder="定位" defaultValue={c.role} onBlur={(e) => e.target.value !== c.role && upd(c, { role: e.target.value })} />
-              <textarea className="char-app" rows={2} placeholder="外貌设定（用于角色一致性）" defaultValue={c.appearance} onBlur={(e) => e.target.value !== c.appearance && upd(c, { appearance: e.target.value })} />
+              <textarea className="char-app" placeholder="外貌设定" defaultValue={c.appearance} onBlur={(e) => e.target.value !== c.appearance && upd(c, { appearance: e.target.value })} />
             </div>
             <button className="ghost danger" onClick={() => del(c)}>删除</button>
           </div>
