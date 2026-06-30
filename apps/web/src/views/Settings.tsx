@@ -203,7 +203,7 @@ export function SettingsView() {
                 {showKey === p.id ? '隐藏' : '显示'}
               </span>
             </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div className="prov-actions">
               <button className="primary" disabled={testing != null} onClick={() => save(p.id)}>{keys[p.id] ? "保存 Key" : "更新"}</button>
               <button className="ghost" disabled={testing === p.id || !p.configured} onClick={() => test(p.id)}>{testing === p.id ? "测试中..." : "测试连通性"}</button>
               {p.configured && (
@@ -222,7 +222,7 @@ export function SettingsView() {
                   }}>清除 Key</button>
               )}
             </div>
-            {testResult[p.id] && <p className="small" style={{ color: testResult[p.id].startsWith("OK") ? "var(--ok)" : "var(--err)", margin: 0 }}>{testResult[p.id]}</p>}
+            {testResult[p.id] && <p className="prov-test-result" style={{ color: testResult[p.id].startsWith("OK") ? "var(--ok)" : "var(--err)" }}>{testResult[p.id]}</p>}
           </div>
         ))}
       </div>
