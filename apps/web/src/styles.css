@@ -54,7 +54,7 @@ h3 { font-size: 16px; margin: 6px 0; }
 .form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
 .form label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
 .form .full, .form .actions { grid-column: 1 / -1; }
-.form input, .form textarea, .form select, .actions { display: flex; justify-content: flex-end; }
+.actions { display: flex; justify-content: flex-end; }
 .proj { cursor: pointer; display: flex; flex-direction: column; gap: 6px; transition: border-color .15s; }
 .proj:hover { border-color: var(--accent); }
 .proj-top { display: flex; justify-content: space-between; align-items: center; }
@@ -94,10 +94,8 @@ h3 { font-size: 16px; margin: 6px 0; }
   font-size: 13px;
   color: var(--muted);
 }
-.form-grid .full,
-.form-grid .actions {
-  grid-column: 1 / -1;
-}
+.form-grid .full { grid-column: 1 / -1; }
+.form-grid .actions { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; }
 .form-grid input,
 .form-grid textarea,
 .form-grid select {
@@ -114,18 +112,6 @@ h3 { font-size: 16px; margin: 6px 0; }
 .form-grid textarea:focus,
 .form-grid select:focus {
   border-color: var(--accent);
-}
-
-@media (max-width: 720px) {
-  .custom-form .form-grid { grid-template-columns: 1fr; }
-  .settings .grid { grid-template-columns: 1fr; }
-  .settings .grid .card.provider { padding: 14px; }
-  .ws-layout { flex-direction: column; }
-  .ws-side { width: 100%; position: static; }
-  .ws-nav { flex-direction: row; overflow-x: auto; }
-  .ws-nav button { white-space: nowrap; text-align: center; justify-content: center; }
-  .ws-nav button.active { border-bottom: 2px solid var(--accent); background: transparent; }
-  .form-grid { grid-template-columns: 1fr; }
 }
 
 /* 分步创建 */
@@ -145,32 +131,9 @@ h3 { font-size: 16px; margin: 6px 0; }
 .confirm-row:last-child { border-bottom: none; }
 .confirm-row .muted { flex-shrink: 0; }
 
-
-
-
-.prov-head strong {
-  font-size: 15px;
-}
-.prov-head .chip {
-  margin-right: auto;
-}
-
-.prov-info p {
-  margin: 0;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.4;
-}
-
-
-
-
-.prov-actions button {
-  font-size: 13px;
-  padding: 7px 14px;
-  white-space: nowrap;
-}
-
+@media (max-width: 720px) {
+  .settings .grid { grid-template-columns: 1fr; }
+  .settings .grid .card { padding: 14px; }
 
 /* 供应商卡片 */
 .settings .grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
@@ -270,23 +233,15 @@ h3 { font-size: 16px; margin: 6px 0; }
   border-color: var(--accent);
 }
 
-
-
-
-
-
 .prov-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
 }
-.prov-actions button {
-  font-size: 13px;
-  padding: 7px 14px;
-  white-space: nowrap;
-}
+
 .prov-test-result {
+}
   font-size: 12px;
   margin: 0;
   line-height: 1.4;
