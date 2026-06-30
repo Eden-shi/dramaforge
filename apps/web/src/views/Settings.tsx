@@ -31,6 +31,7 @@ export function SettingsView() {
   const [saved, setSaved] = useState<string | null>(null);
   const [testing, setTesting] = useState<string | null>(null);
   const [testResult, setTestResult] = useState<Record<string, string>>({});
+  const [showKey, setShowKey] = useState<string | null>(null);
 
   // Custom provider form
   const [showForm, setShowForm] = useState(false);
@@ -183,21 +184,43 @@ export function SettingsView() {
               </span>
               {p.custom && (
                 <button className="ghost danger" style={{ marginLeft: 'auto', fontSize: 12, padding: '4px 8px' }}
-                  onClick={() => removeCustom(p.id)}>删除</button>
+                  onClick={() => removeCustom(p.id)}>删除供应商</button>
               )}
             </div>
             <p className="muted small">{p.baseUrl}</p>
             <p className="muted small">模型：{p.model || '默认'}</p>
             {p.protocol && <p className="muted small" style={{ fontSize: 11 }}>协议：{p.protocol}</p>}
-            <input
-              type="password"
-              placeholder={p.configured ? '已保存（输入新值可覆盖）' : '粘贴 API Key'}
-              value={keys[p.id] ?? ''}
-              onChange={(e) => setKeys((k) => ({ ...k, [p.id]: e.target.value }))}
-            />
-            <div style={{ display: "flex", gap: 8 }}>
-              <button className="primary" disabled={!keys[p.id]} onClick={() => save(p.id)}>保存</button>
-              <button className="ghost" disabled={testing === p.id || !p.configured} onClick={() => test(p.id)}>{testing === p.id ? "测试中..." : "测试"}</button>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              <input
+                type={showKey === p.id ? 'text' : 'password'}
+                placeholder={p.configured ? '已配置，输入新值可覆盖' : '粘贴 API Key'}
+                value={keys[p.id] ?? ''}
+                onChange={(e) => setKeys((k) => ({ ...k, [p.id]: e.target.value }))}
+                style={{ flex: 1 }}
+              />
+              <span style={{ cursor: 'pointer', fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap', userSelect: 'none' }}
+                onClick={() => setShowKey((prev) => (prev === p.id ? null : p.id))}>
+                {showKey === p.id ? '隐藏' : '显示'}
+              </span>
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button className="primary" disabled={testing != null} onClick={() => save(p.id)}>{keys[p.id] ? "保存 Key" : "更新"}</button>
+              <button className="ghost" disabled={testing === p.id || !p.configured} onClick={() => test(p.id)}>{testing === p.id ? "测试中..." : "测试连通性"}</button>
+              {p.configured && (
+                <button className="ghost danger" disabled={testing != null}
+                  onClick={async () => {
+                    if (!confirm(`确认清除「${p.name}」的 API Key 吗？`)) return;
+                    setKeys((k) => ({ ...k, [p.id]: '' }));
+                    try {
+                      await api.setProvider(p.id, { apiKey: '' });
+                      setProviders(await api.listProviders());
+                      setSaved('已清除 ' + p.name);
+                      setTimeout(() => setSaved(null), 2000);
+                    } catch (e: any) {
+                      setSaved('清除失败：' + e.message);
+                    }
+                  }}>清除 Key</button>
+              )}
             </div>
             {testResult[p.id] && <p className="small" style={{ color: testResult[p.id].startsWith("OK") ? "var(--ok)" : "var(--err)", margin: 0 }}>{testResult[p.id]}</p>}
           </div>
