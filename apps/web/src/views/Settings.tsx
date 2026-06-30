@@ -10,18 +10,11 @@ const TABS: { t: ProviderType; label: string }[] = [
 ];
 
 const PROTOCOLS: { id: ProviderProtocol; label: string; hint: string; examples: string }[] = [
-
-  { id: 'openai_compat', label: 'OpenAI 兼容协议', hint: '标准 /v1/chat/completions 接口', examples: 'DeepSeek 全系、通义 Qwen、智谱 GLM、硅基流动、OpenRouter、MiniMax、Kimi、零一万物、Yi、StepFun 等' },
-
-
+  { id: 'openai_compat', label: 'OpenAI 兼容协议', hint: '标准 /v1/chat/completions 接口，同步返回', examples: 'DeepSeek、通义 Qwen、智谱 GLM、硅基流动、OpenRouter、MiniMax、Kimi、零一万物、Yi、StepFun 等' },
   { id: 'dashscope_async', label: '通义异步（文生图）', hint: '提交任务→轮询 task_id', examples: '通义万相 wanx-v1' },
-
-
   { id: 'kling_async', label: '可灵异步（视频）', hint: 'POST 提交→GET 轮询', examples: '可灵 Kling 全系' },
-
-
   { id: 'jimeng_async', label: '即梦异步（视频）', hint: '火山引擎风格异步任务', examples: '即梦 Dreamina、火山引擎方舟视频模型' },
-
+  { id: 'minimax_async', label: 'MiniMax 异步（视频+TTS）', hint: 'MiniMax 海螺视频 / 语音合成', examples: 'MiniMax video-01、speech-01-hd' },
 ];
 
 export function SettingsView() {
@@ -123,9 +116,9 @@ export function SettingsView() {
       </div>
 
       {showForm && (
-        <div className="card" style={{ marginBottom: 16, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'var(--muted)' }}>
+        <div className="custom-form" style={{ marginBottom: 16, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="form-grid">
+            <label className="grid-label">
               名称
               <input placeholder="例如 硅基流动" value={formName} onChange={(e) => setFormName(e.target.value)} />
             </label>
@@ -138,7 +131,7 @@ export function SettingsView() {
                     (tab === 'llm' && p.id === 'openai_compat') ||
                     (tab === 'image' && (p.id === 'openai_compat' || p.id === 'dashscope_async')) ||
                     (tab === 'tts' && (p.id === 'openai_compat' || p.id === 'minimax_async')) ||
-                    (tab === 'video' && (p.id === 'kling_async' || p.id === 'jimeng_async' || p.id === 'minimax_async'))
+                    (tab === 'video' && (p.id === 'openai_compat' || p.id === 'kling_async' || p.id === 'jimeng_async' || p.id === 'minimax_async'))
                   );
                 }).map((p) => (
                   <option key={p.id} value={p.id} title={p.hint}>{p.label}</option>
@@ -155,15 +148,15 @@ export function SettingsView() {
               <input placeholder="deepseek-ai/DeepSeek-V3" value={formModel} onChange={(e) => setFormModel(e.target.value)}
   style={{ fontFamily: 'monospace', fontSize: 13 }} />
             </label>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'var(--muted)', gridColumn: '1 / -1' }}>
+            <label className="full">
               API Key
               <input type="password" placeholder="sk-..." value={formApiKey} onChange={(e) => setFormApiKey(e.target.value)} />
             </label>
           </div>
-          <p className="muted small" style={{ margin: 0 }}>
+          <p className="muted small" >
             {PROTOCOLS.find((p) => p.id === formProtocol)?.hint}
           </p>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+          <div className="actions">
             <button className="ghost" onClick={() => setShowForm(false)}>取消</button>
             <button className="primary" disabled={formBusy || !formName || !formBaseUrl} onClick={addCustom}>
               {formBusy ? '添加中…' : '确认添加'}
