@@ -183,7 +183,7 @@ export function SettingsView() {
             <p className="muted small">{p.baseUrl}</p>
             <p className="muted small">模型：{p.model || '默认'}</p>
             {p.protocol && <p className="muted small" style={{ fontSize: 11 }}>协议：{p.protocol}</p>}
-            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <div className="prov-key-row">
               <input
                 type={showKey === p.id ? 'text' : 'password'}
                 placeholder={p.configured ? '已配置，输入新值可覆盖' : '粘贴 API Key'}
@@ -191,7 +191,7 @@ export function SettingsView() {
                 onChange={(e) => setKeys((k) => ({ ...k, [p.id]: e.target.value }))}
                 style={{ flex: 1 }}
               />
-              <span style={{ cursor: 'pointer', fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap', userSelect: 'none' }}
+              <span className="toggle-vis"
                 onClick={() => setShowKey((prev) => (prev === p.id ? null : p.id))}>
                 {showKey === p.id ? '隐藏' : '显示'}
               </span>

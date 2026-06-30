@@ -103,7 +103,7 @@ h3 { font-size: 16px; margin: 6px 0; }
 .form-grid select {
   background: var(--panel-2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--text);
   padding: 10px 12px;
   font-size: 14px;
@@ -156,20 +156,8 @@ h3 { font-size: 16px; margin: 6px 0; }
   line-height: 1.4;
 }
 
-.prov-key-row input {
-  flex: 1;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  padding: 10px 12px;
-  font-size: 14px;
-  outline: none;
-  width: 100%;
-}
-.prov-key-row input:focus {
-  border-color: var(--accent);
-}
+
+
 
 .prov-actions button {
   font-size: 13px;
@@ -253,7 +241,7 @@ h3 { font-size: 16px; margin: 6px 0; }
   flex: 1;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--text);
   padding: 10px 12px;
   font-size: 14px;
@@ -267,20 +255,30 @@ h3 { font-size: 16px; margin: 6px 0; }
 .prov-key-row .toggle-vis {
   cursor: pointer;
   font-size: 13px;
-  color: var(--muted);
+  color: var(--text);
   white-space: nowrap;
   user-select: none;
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 6px;
-  transition: color .15s;
+  transition: all .15s;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 .prov-key-row .toggle-vis:hover {
-  color: var(--text);
+  border-color: var(--accent);
 }
+
+
+
+
+
+
 .prov-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 .prov-actions button {
   font-size: 13px;
@@ -292,8 +290,9 @@ h3 { font-size: 16px; margin: 6px 0; }
   margin: 0;
   line-height: 1.4;
   padding: 6px 10px;
-  background: var(--bg);
-  border-radius: 6px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
 }
 .custom-form .form-grid .grid-label {
   display: flex;
@@ -314,7 +313,7 @@ h3 { font-size: 16px; margin: 6px 0; }
 .custom-form .form-grid select {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--text);
   padding: 9px 12px;
   font-size: 14px;
