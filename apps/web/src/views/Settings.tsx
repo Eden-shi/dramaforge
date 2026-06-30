@@ -108,7 +108,7 @@ export function SettingsView() {
         {TABS.map((x) => (
           <button key={x.t} className={tab === x.t ? 'active' : ''} onClick={() => setTab(x.t)}>{x.label}</button>
         ))}
-        <div style={{ marginLeft: 'auto' }}>
+        <div className="tab-right">
           <button className="ghost" onClick={() => setShowForm(s => !s)}>
             {showForm ? '收起' : '+ 添加自定义'}
           </button>
