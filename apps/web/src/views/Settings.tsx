@@ -82,7 +82,7 @@ export function SettingsView() {
     try {
       const r = await api.testProvider(id);
       setTestResult((tr) => ({ ...tr, [id]: r.ok ? ('OK ' + (r.reply || '成功')) : ('X ' + (r.error || '失败')) }));
-    } catch (e) {
+    } catch (e: any) {
       setTestResult((tr) => ({ ...tr, [id]: 'X ' + (e.message || '失败') }));
     } finally { setTesting(null); }
   }

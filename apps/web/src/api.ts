@@ -113,7 +113,7 @@ export const api = {
 
   // ---------- 编辑类 ----------
   reparse: (projectId: string) =>
-    jpost<{ ok: boolean; characters: number; episodes: number }>(`/api/projects/${projectId}/reparse`),
+    jpost<{ ok: boolean; characters: number; episodes: number }>(`/api/projects/${projectId}/reparse`, {}),
   setProjectConfig: (projectId: string, config: Partial<Project['config']>) =>
     jput<{ ok: boolean; config: Project['config'] }>(`/api/projects/${projectId}/config`, config),
 

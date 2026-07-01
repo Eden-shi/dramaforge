@@ -49,7 +49,7 @@ export function editingRoutes(app: FastifyInstance, repo: Repo) {
     project.status = 'scripted';
     repo.upsertProject(project);
     await repo.flush();
-    return { ok: true, characters: characters.length, episodes: realEps.length };
+    return { ok: true, characters: (repo.getProject(id)?.characters ?? []).length, episodes: realEps.length };
   });
 
   // ---------- B3/D1 项目配置 ----------

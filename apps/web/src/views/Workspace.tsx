@@ -318,9 +318,13 @@ function CharactersPanel({ project, reload, setErr }: { project: Project; reload
           <div key={c.id} className="char-card">
             <div className="char-no">{c.role || '配角'}</div>
             <div className="char-body">
-              <input className="char-name" defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && upd(c, { name: e.target.value })} />
-              <input className="char-role" placeholder="定位" defaultValue={c.role} onBlur={(e) => e.target.value !== c.role && upd(c, { role: e.target.value })} />
-              <textarea className="char-app" placeholder="外貌设定" defaultValue={c.appearance} onBlur={(e) => e.target.value !== c.appearance && upd(c, { appearance: e.target.value })} />
+              <div className="char-row">
+                <label>名字</label>
+                <input className="char-name" defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && upd(c, { name: e.target.value })} />
+                <label>定位</label>
+                <input className="char-role" placeholder="定位" defaultValue={c.role} onBlur={(e) => e.target.value !== c.role && upd(c, { role: e.target.value })} />
+              </div>
+              <textarea className="char-app" rows={2} placeholder="外貌设定" defaultValue={c.appearance} onBlur={(e) => e.target.value !== c.appearance && upd(c, { appearance: e.target.value })} />
             </div>
             <button className="ghost danger" onClick={() => del(c)}>删除</button>
           </div>
