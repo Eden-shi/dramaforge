@@ -137,10 +137,75 @@ h3 { font-size: 16px; margin: 6px 0; }
 .dot.off { color: var(--muted); }
 
 /* === Cost Table === */
-.cost-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
-.cost-table th, .cost-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); }
-.cost-table th { color: var(--muted); font-weight: 500; }
-.total-cost { font-size: 15px; font-weight: 700; color: var(--ok); }
+/* === 费用明细卡片 === */
+.cost-summary {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+.cost-summary .step-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.cost-summary .step-head h2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+.cost-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ok);
+}
+.cost-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cost-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--panel-2);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.cost-label {
+  color: var(--text);
+  flex: 1;
+}
+.cost-count {
+  color: var(--muted);
+  margin: 0 16px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.cost-amount {
+  color: var(--accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  min-width: 70px;
+  text-align: right;
+}
+.cost-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px 0;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+}
+.cost-footer span:last-child {
+  color: var(--ok);
+  font-size: 16px;
+}
 .toast { font-size: 13px; padding: 8px 14px; border-radius: 8px; background: rgba(110,168,254,.15); border: 1px solid rgba(110,168,254,.25); color: var(--accent); margin-bottom: 14px; }
 .toast.static { border-left: 3px solid var(--accent); }
 

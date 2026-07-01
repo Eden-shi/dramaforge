@@ -151,25 +151,25 @@ export function WorkspaceView(props: { projectId: string; onBack: () => void }) 
       </div>
 
       {costs && costs.items.length > 0 && (
-        <section className="card step">
+        <div className="cost-summary">
           <div className="step-head">
             <h2>费用明细</h2>
-            <span className="total-cost">合计：¥{costs.total.toFixed(2)}</span>
+            <span className="cost-total">¥{costs.total.toFixed(2)}</span>
           </div>
-          <table className="cost-table">
-            <thead><tr><th>项目</th><th>数量</th><th>费用</th></tr></thead>
-            <tbody>
-              {costs.items.map((item, i) => (
-                <tr key={i}>
-                  <td>{item.label}</td>
-                  <td>{item.tokens ? item.tokens.toLocaleString() + ' tokens' : item.shots ? item.shots + ' 镜' : item.count + ' 个'}</td>
-                  <td>¥{item.cost.toFixed(4)}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot><tr><td colSpan={2}>总计</td><td>¥{costs.total.toFixed(2)}</td></tr></tfoot>
-          </table>
-        </section>
+          <div className="cost-list">
+            {costs.items.map((item, i) => (
+              <div key={i} className="cost-row">
+                <span className="cost-label">{item.label}</span>
+                <span className="cost-count">{item.tokens ? item.tokens.toLocaleString() + ' tokens' : item.shots ? item.shots + ' 镜' : (item.count ?? 0) + ' 个'}</span>
+                <span className="cost-amount">¥{item.cost.toFixed(4)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="cost-footer">
+            <span>总计</span>
+            <span>¥{costs.total.toFixed(2)}</span>
+          </div>
+        </div>
       )}
     </div>
   );
